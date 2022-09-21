@@ -1,18 +1,19 @@
 ########################################################################################################################
 #!!
-#! @input user_principal_name: Unique identifier of the user  
+#! @input user_principal_name: Unique identifier of the user
 #! @input force_change_password: Force the user to change his/her password first time he/she signs in
 #!!#
 ########################################################################################################################
-namespace: office365.user
+namespace: Alliance
 flow:
-  name: create_user
+  name: restapi_operation
   inputs:
     - display_name: Test
     - mail_nick_name: Test
     - user_principal_name: Test@z1jfl.onmicrosoft.com
-    - password: Admin12345!
-    - force_change_password: 'true'
+    - password:
+        sensitive: true
+    - force_change_password: 'false'
   workflow:
     - authenticate:
         do:
