@@ -75,7 +75,7 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - WARNING: SUCCESS
-          - FAILURE: FAILURE_1
+          - FAILURE: on_failure
   outputs:
     - json: '${json}'
   results:
@@ -86,8 +86,8 @@ extensions:
   graph:
     steps:
       ssh_command:
-        x: 80
-        'y': 40
+        x: 0
+        'y': 200
       genpassword:
         x: 120
         'y': 200
@@ -106,23 +106,20 @@ extensions:
             targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
             port: FAILURE
       aos_adduser:
-        x: 560
+        x: 600
         'y': 200
         navigate:
-          9fc89cb4-548c-5adb-9ead-ad97f0cc57ca:
+          ac611c07-a5be-34e2-2dc4-28fd134aa818:
             targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
             port: SUCCESS
-          5f481103-b90e-d92d-9592-408943eafcab:
+          ee2a7d48-0ccd-0979-4dcf-fc901e8e7c98:
             targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
             port: WARNING
-          7fa00b65-7bcf-f8ab-3c9b-82af9307ac2e:
-            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
-            port: FAILURE
     results:
       SUCCESS:
         f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f:
           x: 840
-          'y': 200
+          'y': 240
       FAILURE_1:
         ece76b31-e874-2428-67f1-cd9b21fd41b8:
           x: 400

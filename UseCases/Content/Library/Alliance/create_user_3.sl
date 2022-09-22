@@ -83,15 +83,23 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - WARNING: SUCCESS
-          - FAILURE: FAILURE_1
+          - FAILURE: on_failure
   outputs:
     - json: '${json}'
   results:
     - SUCCESS
     - FAILURE_1
+    - FAILURE
 extensions:
   graph:
     steps:
+      write_to_file:
+        x: 0
+        'y': 200
+        navigate:
+          7f4e13cc-b7b5-b158-77e8-8eb05b7595e6:
+            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
+            port: FAILURE
       ssh_command:
         x: 120
         'y': 200
@@ -120,27 +128,17 @@ extensions:
         x: 680
         'y': 200
         navigate:
-          9fc89cb4-548c-5adb-9ead-ad97f0cc57ca:
-            targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
-            port: SUCCESS
-          5f481103-b90e-d92d-9592-408943eafcab:
+          6e4bfd79-9a19-a5e1-f368-36a8dbbb96ac:
             targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
             port: WARNING
-          7fa00b65-7bcf-f8ab-3c9b-82af9307ac2e:
-            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
-            port: FAILURE
-      write_to_file:
-        x: 0
-        'y': 200
-        navigate:
-          7f4e13cc-b7b5-b158-77e8-8eb05b7595e6:
-            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
-            port: FAILURE
+          6d182793-9855-ae10-4fe3-529de85bb3cf:
+            targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
+            port: SUCCESS
     results:
       SUCCESS:
         f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f:
           x: 840
-          'y': 200
+          'y': 240
       FAILURE_1:
         ece76b31-e874-2428-67f1-cd9b21fd41b8:
           x: 400

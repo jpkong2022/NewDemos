@@ -6,7 +6,7 @@ operation:
     - email: test1@hp.com
     - password: Cloud@123
   sequential_action:
-    gav: 'com.microfocus.seq:Alliance.aos_adduser:9.22'
+    gav: 'com.microfocus.seq:Alliance.aos_adduser:9.23'
     skills:
       - Java
       - SAP
