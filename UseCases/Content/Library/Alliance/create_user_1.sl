@@ -51,17 +51,7 @@ flow:
           - json: '${return_result}'
         navigate:
           - FAILURE: FAILURE_1
-          - SUCCESS: aos_adduser
-    - aos_adduser:
-        do:
-          Alliance.aos_adduser:
-            - username: '${display_name}'
-            - email: '${user_principal_name}'
-            - password: Cloud@123
-        navigate:
           - SUCCESS: SUCCESS
-          - WARNING: SUCCESS
-          - FAILURE: FAILURE_1
   outputs:
     - json: '${json}'
   results:
@@ -81,25 +71,15 @@ extensions:
             targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
             port: FAILURE
       http_graph_action:
-        x: 400
+        x: 440
         'y': 200
         navigate:
           7855f798-8380-bd5f-8c6d-20d55decd8c5:
             targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
             port: FAILURE
-      aos_adduser:
-        x: 560
-        'y': 200
-        navigate:
-          9fc89cb4-548c-5adb-9ead-ad97f0cc57ca:
+          a4f0dd57-b6f3-ef74-dc18-cb6315f9a5de:
             targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
             port: SUCCESS
-          5f481103-b90e-d92d-9592-408943eafcab:
-            targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
-            port: WARNING
-          7fa00b65-7bcf-f8ab-3c9b-82af9307ac2e:
-            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
-            port: FAILURE
     results:
       SUCCESS:
         f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f:

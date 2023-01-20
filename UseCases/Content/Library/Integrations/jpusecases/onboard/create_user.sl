@@ -4,42 +4,20 @@
 #! @input force_change_password: Force the user to change his/her password first time he/she signs in
 #!!#
 ########################################################################################################################
-namespace: Alliance
+namespace: Integrations.jpusecases.onboard
 flow:
-  name: create_user_3
+  name: create_user
   inputs:
-    - display_name: centos
-    - mail_nick_name: centos
-    - user_principal_name: centos@z1jfl.onmicrosoft.com
+    - display_name: Test
+    - mail_nick_name: Test
+    - user_principal_name: Test@z1jfl.onmicrosoft.com
     - force_change_password: 'false'
   workflow:
-    - write_to_file:
-        do:
-          io.cloudslang.base.filesystem.write_to_file:
-            - file_path: "c:\\temp\\out.txt"
-            - text: hello
-        navigate:
-          - SUCCESS: ssh_command
-          - FAILURE: FAILURE_1
-    - ssh_command:
-        do:
-          io.cloudslang.base.ssh.ssh_command:
-            - host: 172.31.75.22
-            - command: whoami
-            - username: centos
-            - password:
-                value: 'go.MF.admin123!'
-                sensitive: true
-        publish:
-          - user: '${return_result}'
-        navigate:
-          - SUCCESS: genpassword
-          - FAILURE: FAILURE_1
     - genpassword:
         do:
           Alliance.genpassword: []
         publish:
-          - passwd: '${password}'
+          - password
         navigate:
           - SUCCESS: authenticate
     - authenticate:
@@ -68,12 +46,14 @@ flow:
                     "password": "%s"
                   }
                 }
-                ''' % (user, user, user_principal_name, force_change_password, passwd)}
+                ''' % (display_name, mail_nick_name, user_principal_name, force_change_password, password)}
         publish:
           - json: '${return_result}'
         navigate:
           - FAILURE: FAILURE_1
-          - SUCCESS: SUCCESS
+          - SUCCESS:
+              next_step: SUCCESS
+              ROI: '100'
   outputs:
     - json: '${json}'
   results:
@@ -82,45 +62,31 @@ flow:
 extensions:
   graph:
     steps:
-      write_to_file:
-        x: 40
-        'y': 160
-        navigate:
-          7f4e13cc-b7b5-b158-77e8-8eb05b7595e6:
-            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
-            port: FAILURE
-      ssh_command:
-        x: 120
-        'y': 120
-        navigate:
-          5b774c5d-272d-513e-26b7-014c3f26c10c:
-            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
-            port: FAILURE
       genpassword:
-        x: 280
-        'y': 120
+        x: 80
+        'y': 200
       authenticate:
-        x: 360
+        x: 240
         'y': 200
         navigate:
           2d8ea526-af81-4889-e056-544a1bd111b3:
             targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
             port: FAILURE
       http_graph_action:
-        x: 520
+        x: 400
         'y': 200
         navigate:
           7855f798-8380-bd5f-8c6d-20d55decd8c5:
             targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
             port: FAILURE
-          e11b51ae-b2ae-aad7-e945-c27befb6ae06:
+          5d931a97-695e-fc96-7c02-d752dd0ed5c3:
             targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
             port: SUCCESS
     results:
       SUCCESS:
         f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f:
           x: 840
-          'y': 240
+          'y': 200
       FAILURE_1:
         ece76b31-e874-2428-67f1-cd9b21fd41b8:
           x: 400

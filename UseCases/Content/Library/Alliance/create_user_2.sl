@@ -65,17 +65,7 @@ flow:
           - json: '${return_result}'
         navigate:
           - FAILURE: FAILURE_1
-          - SUCCESS: aos_adduser
-    - aos_adduser:
-        do:
-          Alliance.aos_adduser:
-            - username: '${user}'
-            - email: '${user_principal_name}'
-            - password: Cloud@123
-        navigate:
           - SUCCESS: SUCCESS
-          - WARNING: SUCCESS
-          - FAILURE: on_failure
   outputs:
     - json: '${json}'
   results:
@@ -86,11 +76,11 @@ extensions:
   graph:
     steps:
       ssh_command:
-        x: 0
+        x: 40
         'y': 200
       genpassword:
-        x: 120
-        'y': 200
+        x: 160
+        'y': 80
       authenticate:
         x: 240
         'y': 200
@@ -105,16 +95,9 @@ extensions:
           7855f798-8380-bd5f-8c6d-20d55decd8c5:
             targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
             port: FAILURE
-      aos_adduser:
-        x: 600
-        'y': 200
-        navigate:
-          ac611c07-a5be-34e2-2dc4-28fd134aa818:
+          10ee66c3-7e63-b297-1020-56b0eb16de10:
             targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
             port: SUCCESS
-          ee2a7d48-0ccd-0979-4dcf-fc901e8e7c98:
-            targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
-            port: WARNING
     results:
       SUCCESS:
         f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f:
