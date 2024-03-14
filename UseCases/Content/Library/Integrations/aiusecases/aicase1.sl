@@ -8,36 +8,42 @@ namespace: aiusecases
 version: '2.0'
 
 flow:
-  name: query_asset_number
+  name: get_cpu_usage
   namespace: my_namespace
   description: |
-    This workflow queries Micro Focus Asset Manager to retrieve the asset number of a device based on its IP address.
+    This workflow retrieves the CPU usage of a Linux server based on its IP address.
   inputs:
     - name: ip_address
       required: true
-      description: The IP address of the device to query.
+      description: The IP address of the Linux server to query.
 
   steps:
-    - name: authenticate
-      action: "http:authenticate"
+    - name: ssh_command
+      action: "ssh:run_command"
       inputs:
-        username: "your_username"
-        password: "your_password"
-        url: "https://asset_manager_url/authenticate"
+        host: "${ip_address}"
+        port: "22"
+        username: "your_ssh_username"
+        password: "your_ssh_password"
+        command: "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\([0-9.]*\)%* id.*/\1/' | awk '{print 100 - $1}'"
 
-    - name: query_device
-      action: "http:execute"
+    - name: parse_cpu_usage
+      action: "string:split"
       inputs:
-        headers: {"Authorization": "Bearer ${authenticate.result.response_body['access_token']}"}
-        method: "GET"
-        url: "https://asset_manager_url/devices?ip=${ip_address}"
+        delimiter: "\n"
+        text: "${ssh_command.result}"
+      outputs:
+        - name: cpu_usage_lines
 
-    - name: extract_asset_number
-      action: "script:invoke"
+    - name: extract_cpu_usage
+      action: "string:split"
       inputs:
-        script: |
-          return response['asset_number']
+        delimiter: " "
+        text: "${cpu_usage_lines[0]}"
+      outputs:
+        - name: cpu_usage_values
 
   outputs:
-    - name: asset_number
-      value: "${extract_asset_number.result}"
+    - name: cpu_usage
+      value: "${cpu_usage_values[0]}"
+
