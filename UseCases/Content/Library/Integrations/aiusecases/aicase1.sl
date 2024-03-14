@@ -8,42 +8,90 @@ namespace: aiusecases
 version: '2.0'
 
 flow:
-  name: get_cpu_usage
-  namespace: my_namespace
-  description: |
-    This workflow retrieves the CPU usage of a Linux server based on its IP address.
+  name: create_user
   inputs:
-    - name: ip_address
-      required: true
-      description: The IP address of the Linux server to query.
-
-  steps:
-    - name: ssh_command
-      action: "ssh:run_command"
-      inputs:
-        host: "${ip_address}"
-        port: "22"
-        username: "your_ssh_username"
-        password: "your_ssh_password"
-        command: "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\([0-9.]*\)%* id.*/\1/' | awk '{print 100 - $1}'"
-
-    - name: parse_cpu_usage
-      action: "string:split"
-      inputs:
-        delimiter: "\n"
-        text: "${ssh_command.result}"
-      outputs:
-        - name: cpu_usage_lines
-
-    - name: extract_cpu_usage
-      action: "string:split"
-      inputs:
-        delimiter: " "
-        text: "${cpu_usage_lines[0]}"
-      outputs:
-        - name: cpu_usage_values
-
+    - display_name: Test
+    - mail_nick_name: Test
+    - user_principal_name: Test@z1jfl.onmicrosoft.com
+    - force_change_password: 'false'
+  workflow:
+    - genpassword:
+        do:
+          Alliance.genpassword: []
+        publish:
+          - password
+        navigate:
+          - SUCCESS: authenticate
+    - authenticate:
+        do:
+          office365.auth.authenticate: []
+        publish:
+          - token
+        navigate:
+          - FAILURE: FAILURE_1
+          - SUCCESS: http_graph_action
+    - http_graph_action:
+        do:
+          office365._tools.http_graph_action:
+            - url: /users
+            - token: '${token}'
+            - method: POST
+            - body: |-
+                ${'''
+                {
+                  "accountEnabled": true,
+                  "displayName": "%s",
+                  "mailNickname": "%s",
+                  "userPrincipalName": "%s",
+                  "passwordProfile" : {
+                    "forceChangePasswordNextSignIn": %s,
+                    "password": "%s"
+                  }
+                }
+                ''' % (display_name, mail_nick_name, user_principal_name, force_change_password, password)}
+        publish:
+          - json: '${return_result}'
+        navigate:
+          - FAILURE: FAILURE_1
+          - SUCCESS:
+              next_step: SUCCESS
+              ROI: '100'
   outputs:
-    - name: cpu_usage
-      value: "${cpu_usage_values[0]}"
+    - json: '${json}'
+  results:
+    - SUCCESS
+    - FAILURE_1
+extensions:
+  graph:
+    steps:
+      genpassword:
+        x: 80
+        'y': 200
+      authenticate:
+        x: 240
+        'y': 200
+        navigate:
+          2d8ea526-af81-4889-e056-544a1bd111b3:
+            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
+            port: FAILURE
+      http_graph_action:
+        x: 400
+        'y': 200
+        navigate:
+          7855f798-8380-bd5f-8c6d-20d55decd8c5:
+            targetId: ece76b31-e874-2428-67f1-cd9b21fd41b8
+            port: FAILURE
+          5d931a97-695e-fc96-7c02-d752dd0ed5c3:
+            targetId: f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f
+            port: SUCCESS
+    results:
+      SUCCESS:
+        f9ca98c4-3b22-08dc-b07e-53dfa4d7d54f:
+          x: 840
+          'y': 200
+      FAILURE_1:
+        ece76b31-e874-2428-67f1-cd9b21fd41b8:
+          x: 400
+          'y': 400
+
 
