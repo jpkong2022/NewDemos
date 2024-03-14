@@ -4,7 +4,7 @@
 #! @input force_change_password: Force the user to change his/her password first time he/she signs in
 #!!#
 ########################################################################################################################
-namespace: aiusecases
+namespace: Integrations:aiusecases
 version: '2.0'
 
 flow:
