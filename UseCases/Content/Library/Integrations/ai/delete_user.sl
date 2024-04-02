@@ -28,3 +28,4 @@ flow:
   results:
     - SUCCESS
     - FAILURE_1
+    - FAILURE_2
