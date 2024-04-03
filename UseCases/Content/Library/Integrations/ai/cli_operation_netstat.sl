@@ -1,6 +1,6 @@
 namespace: ai
 flow:
-  name: cli_operation
+  name: cli_operation_netstat
   workflow:
     - ssh_command:
         do:
