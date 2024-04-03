@@ -6,7 +6,7 @@ flow:
         do:
           io.cloudslang.base.ssh.ssh_command:
             - host: 172.31.28.169  # Replace with your Linux host IP
-            - command: "netstat -tuln | grep ':80 ' | wc -l"
+            - command: "ansible-playbook -i /home/ec2-user/inventory /home/ec2-user/playbook.yml  -v"
             - username: ec2-user  # Replace with your SSH username
             - password:
                 value: 'Automation.123'  # Replace with your SSH password
