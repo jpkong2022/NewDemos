@@ -1,6 +1,6 @@
 namespace: ai
 flow:
-  name: cli_operation
+  name: operation_ansible
   workflow:
     - ssh_command:
         do:
