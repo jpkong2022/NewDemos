@@ -8,7 +8,7 @@ workflow:
 - http_graph_action:
     do:
       office365._tools.http_graph_action:
-        - url: /users/{userIds}
+        - url: '/users/{userIds}'
         - method: DELETE
         - token: '${token}'
     publish:
