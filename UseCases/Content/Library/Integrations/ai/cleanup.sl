@@ -18,6 +18,9 @@ workflow:
             sensitive: true
     publish:
       - result: '${return_result}'
+     navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: FAILURE
 outputs:
   - json: '${json}'
 results:
