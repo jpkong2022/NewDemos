@@ -13,6 +13,9 @@ workflow:
         - token: '${token}'
     publish:
       - json: '${return_result}'
+    navigate:
+       - FAILURE: FAILURE
+       - SUCCESS: SUCCESS
 outputs:
   - json: '${json}'
 results:
