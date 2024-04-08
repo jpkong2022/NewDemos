@@ -1,20 +1,15 @@
-Namespace: ai
-Flow:
-name: cleanup
-inputs:
-- token
-- host
-- sshUsername
-- sshPassword
+namespace: ai
+flow:
+ name: cleanup
 workflow:
 - ssh_command:
     do:
       io.cloudslang.base.ssh.ssh_command:
-        - host: '${host}'
+        - host: 172.31.28.169
         - command: "rm -rf /tmp/*"
-        - username: '${sshUsername}'
+        - username: ec2-user
         - password:
-            value: '${sshPassword}'
+            value:  'Automation.123' 
             sensitive: true
     publish:
       - result: '${return_result}'
