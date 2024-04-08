@@ -1,8 +1,6 @@
 namespace: ai
 flow:
   name: cleanup
-  inputs:
-   - token
   workflow:
     - ssh_command:
         do:
