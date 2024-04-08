@@ -1,7 +1,7 @@
 namespace: ai
 flow:
  name: cleanup2
-   inputs:
+  inputs:
   - token
   - host
   - sshUsername
@@ -18,6 +18,9 @@ flow:
             sensitive: true
     publish:
       - result: '${return_result}'
+     navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: FAILURE
  outputs:
   - json: '${json}'
  results:
