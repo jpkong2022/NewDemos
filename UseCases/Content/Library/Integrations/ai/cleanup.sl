@@ -3,9 +3,6 @@ flow:
   name: cleanup
   inputs:
    - token
-   - host
-   - sshUsername
-   - sshPassword
   workflow:
     - ssh_command:
         do:
