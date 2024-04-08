@@ -1,5 +1,5 @@
-Namespace: ai
-Flow:
+namespace: ai
+flow:
  name: cleanup1
  inputs:
   - token
