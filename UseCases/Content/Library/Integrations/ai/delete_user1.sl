@@ -1,5 +1,5 @@
-Namespace: ai
-Flow:
+namespace: ai
+flow:
 name: delete_user1
 inputs:
 - token
