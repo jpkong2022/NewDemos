@@ -25,4 +25,4 @@ flow:
   - json: '${json}'
  results:
   - FAILURE
-  - SUCCESS]
+  - SUCCESS
