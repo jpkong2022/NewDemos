@@ -1,7 +1,7 @@
 namespace: ai
 flow:
  name: cleanup1
- inputs:
+  inputs:
   - token
   - host
   - sshUsername
