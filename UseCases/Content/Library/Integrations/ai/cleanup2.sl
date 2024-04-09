@@ -13,6 +13,9 @@ flow:
         host: "${host}"
         username: "${username}"
         password: "${password}"
+   navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: FAILURE
   results:
     - FAILURE
     - SUCCESS
