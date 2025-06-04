@@ -10,18 +10,18 @@ flow:
             - protocol: http
             - username: administrator
             - password:
-                value: '*9SG4-YBv&ANu%F?5%BlQszZ=ZX703nV' # AOS Postgres password
+                value: '*9SG4-YBv&ANu%F?5%BlQszZ=ZX703nV'
                 sensitive: true
             - auth_type: basic
-            - script: |
-                $configFile = "C:\Program Files\PostgreSQL\12\data\postgresql.conf" # Adjust path if necessary
-                if (Test-Path $configFile) {
-                    (Get-Content $configFile) -replace '^(#?)max_locks_per_transaction\s*=.*', 'max_locks_per_transaction = 10' | Set-Content $configFile
-                    Write-Host "Configuration updated in $configFile"
-                } else {
-                    Write-Error "Configuration file not found at $configFile"
-                    exit 1 # Exit with error code if file not found
-                }
+            - script: "$configFile = \"C:\\Program Files\\PostgreSQL\\12\\data\\postgresql.conf\" # Adjust path if necessary
+if (Test-Path $configFile) {
+    (Get-Content $configFile) -replace '^(#?)max_locks_per_transaction\s*=.*', 'max_locks_per_transaction = 10' | Set-Content $configFile
+    Write-Host \"Configuration updated in $configFile: max_locks_per_transaction set to 10.\"
+} else {
+    Write-Error \"Configuration file not found at $configFile\"
+    exit 1 # Exit with error code if file not found
+}
+"
             - trust_all_roots: 'true'
             - x_509_hostname_verifier: allow_all
         publish:
@@ -38,10 +38,12 @@ flow:
             - protocol: http
             - username: administrator
             - password:
-                value: '*9SG4-YBv&ANu%F?5%BlQszZ=ZX703nV' # AOS Postgres password
+                value: '*9SG4-YBv&ANu%F?5%BlQszZ=ZX703nV'
                 sensitive: true
             - auth_type: basic
-            - script: "Restart-Service -Name 'postgresql-x64-12'"
+            - script: "Restart-Service -Name 'postgresql-x64-12'
+Write-Host \"Service postgresql-x64-12 restart initiated.\"
+"
             - trust_all_roots: 'true'
             - x_509_hostname_verifier: allow_all
         publish:
