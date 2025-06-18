@@ -17,7 +17,7 @@ flow:
                 $configFile = "C:\Program Files\PostgreSQL\12\data\postgresql.conf" # AOS PostgreSQL config file path
                 if (Test-Path $configFile) {
                     (Get-Content $configFile) -replace '^(#?)max_locks_per_transaction\s*=.*', 'max_locks_per_transaction = 40' | Set-Content $configFile
-                    Write-Host "Configuration updated in $configFile: max_locks_per_transaction set to 40"
+                    Write-Host "Configuration updated: max_locks_per_transaction set to 40 in $configFile"
                 } else {
                     Write-Error "Configuration file not found at $configFile"
                     exit 1 # Exit with error code if file not found
