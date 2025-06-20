@@ -20,7 +20,7 @@ flow:
                     Write-Host "Configuration updated: max_locks_per_transaction set to 50 in $configFile"
                 } else {
                     Write-Error "Configuration file not found at $configFile"
-                    exit 1 # Exit with error code if file not found
+                    exit 1 # Exit  with error code if file not found
                 }
             - trust_all_roots: 'true'
             - x_509_hostname_verifier: allow_all
