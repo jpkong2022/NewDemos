@@ -21,7 +21,7 @@ flow:
           - service_restart_error: '${stderr}'
         navigate:
           - SUCCESS: SUCCESS
-          - FAILURE: on_failure
+          - FAILURE:  on_failure
   outputs:
     - service_restart_result: '${service_restart_result}'
     - service_restart_error: '${service_restart_error}'
