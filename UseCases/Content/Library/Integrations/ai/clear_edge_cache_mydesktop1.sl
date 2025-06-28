@@ -6,25 +6,28 @@ flow:
         do:
           io.cloudslang.base.powershell.powershell_script:
             - host: 172.31.26.86
+            - port: '5985'
+            - protocol: http
             - username: administrator
             - password:
-                value: "get_sp('admin_password')"
+                value: "31lGg&d%Dv-it.A8muSGzIH&ezg6Gz=8"
                 sensitive: true
             - auth_type: basic
             - script: |
-                # Forcefully stop the Microsoft Edge process to release file locks
-                Stop-Process -Name msedge -Force -ErrorAction SilentlyContinue
+                # Stop Microsoft Edge processes to release file locks
+                Stop-Process -Name "msedge" -Force -ErrorAction SilentlyContinue
 
-                # Define the path to the Edge cache directory using environment variables for reliability
-                $edgeCachePath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Microsoft\Edge\User Data\Default\Cache"
+                # Path to the Edge cache directory for user 'jp'
+                $cachePath = "C:\Users\jp\AppData\Local\Microsoft\Edge\User Data\Default\Cache"
 
-                # Check if the cache directory exists and clear it
-                if (Test-Path $edgeCachePath) {
-                    Write-Host "Edge cache directory found at $edgeCachePath. Clearing contents..."
-                    Get-ChildItem -Path $edgeCachePath -Recurse | Remove-Item -Force -Recurse
-                    Write-Host "Microsoft Edge cache has been cleared."
+                if (Test-Path $cachePath) {
+                    Write-Host "Edge cache directory for user 'jp' found. Clearing contents..."
+                    # Get all child items (files and folders) in the cache directory and remove them
+                    Get-ChildItem -Path $cachePath -Recurse | Remove-Item -Force -Recurse
+                    Write-Host "Successfully cleared Edge cache for user 'jp'."
                 } else {
-                    Write-Host "Microsoft Edge cache directory not found. No action taken."
+                    Write-Error "Edge cache directory not found for user 'jp' at path: $cachePath"
+                    exit 1
                 }
             - trust_all_roots: 'true'
             - x_509_hostname_verifier: allow_all
