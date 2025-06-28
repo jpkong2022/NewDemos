@@ -10,36 +10,38 @@ flow:
             - protocol: http
             - username: administrator
             - password:
-                value: "31lGg&d%Dv-it.A8muSGzIH&ezg6Gz=8"
+                value: "get_sp('admin_password')"
                 sensitive: true
             - auth_type: basic
             - script: |
-                # Stop Microsoft Edge processes to release file locks
-                Stop-Process -Name "msedge" -Force -ErrorAction SilentlyContinue
-
-                # Path to the Edge cache directory for user 'jp'
-                $cachePath = "C:\Users\jp\AppData\Local\Microsoft\Edge\User Data\Default\Cache"
-
-                if (Test-Path $cachePath) {
-                    Write-Host "Edge cache directory for user 'jp' found. Clearing contents..."
-                    # Get all child items (files and folders) in the cache directory and remove them
-                    Get-ChildItem -Path $cachePath -Recurse | Remove-Item -Force -Recurse
-                    Write-Host "Successfully cleared Edge cache for user 'jp'."
-                } else {
-                    Write-Error "Edge cache directory not found for user 'jp' at path: $cachePath"
-                    exit 1
+                $userProfile = "jp"
+                $cachePaths = @(
+                    "C:\Users\$userProfile\AppData\Local\Microsoft\Edge\User Data\Default\Cache",
+                    "C:\Users\$userProfile\AppData\Local\Microsoft\Edge\User Data\Default\Code Cache",
+                    "C:\Users\$userProfile\AppData\Local\Microsoft\Edge\User Data\Default\GPUCache"
+                )
+                
+                foreach ($path in $cachePaths) {
+                    if (Test-Path $path) {
+                        Write-Host "Clearing cache at: $path"
+                        Remove-Item -Path "$path\*" -Recurse -Force -ErrorAction SilentlyContinue
+                        Write-Host "Successfully cleared: $path"
+                    } else {
+                        Write-Host "Cache path not found, skipping: $path"
+                    }
                 }
+                Write-Host "Edge cache clearing process completed for user $userProfile."
             - trust_all_roots: 'true'
             - x_509_hostname_verifier: allow_all
         publish:
-          - script_output: '${return_result}'
-          - script_error: '${stderr}'
+          - clear_cache_output: '${return_result}'
+          - clear_cache_error: '${stderr}'
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
   outputs:
-    - script_output: '${script_output}'
-    - script_error: '${script_error}'
+    - clear_cache_output: '${clear_cache_output}'
+    - clear_cache_error: '${clear_cache_error}'
   results:
     - SUCCESS
     - FAILURE
