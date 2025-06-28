@@ -2,7 +2,7 @@ namespace: ai
 flow:
   name: clear_edge_cache_on_mydesktop
   workflow:
-    - clear_edge_cache:
+    - clear_edge_browser_cache:
         do:
           io.cloudslang.base.powershell.powershell_script:
             - host: 172.31.26.86
@@ -10,34 +10,26 @@ flow:
             - protocol: http
             - username: administrator
             - password:
+                # Based on the provided topology, mydesktop and postgreswin1 share the same IP.
+                # The password for postgreswin1 is retrieved via get_sp('admin_password').
+                # This pattern is used here.
                 value: "${get_sp('admin_password')}"
                 sensitive: true
             - auth_type: basic
-            - script: "
-# Stop Edge processes to release file locks to prevent errors
-Stop-Process -Name msedge -Force -ErrorAction SilentlyContinue
-
-# Path to the Edge User Data folder for the current user
-$edgeUserDataPath = \"$env:LOCALAPPDATA\\Microsoft\\Edge\\User Data\\Default\"
-
-# Array of cache-related folders to clear
-$cacheFolders = @(
-    \"$edgeUserDataPath\\Cache\",
-    \"$edgeUserDataPath\\Code Cache\",
-    \"$edgeUserDataPath\\GPUCache\"
-)
-
-# Iterate over the folders and remove them if they exist
-foreach ($folder in $cacheFolders) {
-    if (Test-Path $folder) {
-        Write-Host \"Removing directory: $folder\"
-        Remove-Item -Path $folder -Recurse -Force -ErrorAction SilentlyContinue
-    } else {
-        Write-Host \"Directory not found, skipping: $folder\"
-    }
-}
-Write-Host \"Edge browser cache clearing process completed.\"
-"
+            - script: |
+                $user = "jp"
+                $cachePath = "C:\Users\$user\AppData\Local\Microsoft\Edge\User Data\Default\Cache"
+                if (Test-Path $cachePath) {
+                  Write-Host "Attempting to remove cache at $cachePath..."
+                  Remove-Item -Path "$cachePath\*" -Recurse -Force -ErrorAction SilentlyContinue
+                  if ($?) {
+                    Write-Host "Successfully cleared Edge cache for user '$user'."
+                  } else {
+                    Write-Error "Failed to clear Edge cache for user '$user'."
+                  }
+                } else {
+                  Write-Host "Cache path not found for user '$user': $cachePath. No action taken."
+                }
             - trust_all_roots: 'true'
             - x_509_hostname_verifier: allow_all
         publish:
